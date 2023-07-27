@@ -1,5 +1,7 @@
 from scipy import signal
 from sklearn.preprocessing import MinMaxScaler
+import numpy as np
+from scipy.signal import butter, lfilter
 
 def process(arr):
 
