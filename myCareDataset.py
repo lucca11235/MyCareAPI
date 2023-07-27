@@ -20,12 +20,6 @@ class myCareDataset:
         self.data = None
         self.fs = 100
 
-        self.X_train = None
-        self.X_test = None
-
-        self.y_train = None
-        self.y_test = None
-
     def _load(self, f):
         try:
             d = np.load(f)['arr_0']
@@ -129,17 +123,17 @@ class myCareDataset:
           return np.array([1 if self.data[f][i].origin_file in mode else 0 for f in directories for i in range(numWindows)])
 
 
-    def decimate(self):
+    def decimate(self,N):
       f = self.directories[0]
 
       if isinstance(self.data[f][0], np.ndarray):
         for f in self.directories:
-          self.data[f] = self.data[f][:,::10]
+          self.data[f] = self.data[f][:,::N]
 
       if isinstance(self.data[f][0], window):
         for f in self.directories:
           for w in self.data[f]:
-            w.data = w.data[:,::10]
+            w.data = w.data[:,::N]
 
-      self.fs = 10
+      self.fs = N
 
