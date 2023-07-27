@@ -88,7 +88,24 @@ def CardioFIPreProcessing(window):
                              arr = low_pass)
 
   return processed
+  
+def applyConv(w, kernel):
 
+  # Pad the input array with zeros to ensure the output has the same shape
+  # as the input array.
+  pad_width = len(kernel) - 1
+  padded_w = np.pad(w, ((0, 0), (pad_width, pad_width)), mode='constant')
+
+  # Apply the convolution operation to the padded input array.
+  output_matrix = np.apply_along_axis(lambda row: np.convolve(row, kernel, mode='valid'),
+                                    axis=1,
+                                    arr=padded_w)
+
+  # Pad the output array with zeros to match the shape of the input array.
+  pad_width_output = (0, 0), (0, 1)
+  padded_output = np.pad(output_matrix, pad_width_output, mode='constant')
+
+  return padded_output
 
 def diffPhaseCorrected(data,
                        fix_val = True,
