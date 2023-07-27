@@ -3,6 +3,9 @@ import numpy as np
 from tqdm import tqdm
 import random
 
+from dataclasses import dataclass
+import numpy as np
+
 @dataclass
 class window:
   data: np.array
@@ -72,15 +75,20 @@ class myCareDataset:
 
     def create_dataset(self,
                        p = 0.75,
-                       mode = 0):
+                       mode = 0,
+                       filter = None):
 
       if not 0 <= p <= 100:
             raise ValueError("'p' must be between 0 and 100.")
 
-
+      if isinstance(filter,list):
+        files = filter
+      else:
+        files = list(self.data.keys())
+      
       if mode == 0:
 
-        train_a_directories, test_b_directories = self._train_a_test_b_split_directories(p)
+        train_a_directories, test_b_directories = self._train_a_test_b_split_directories(p,files)
 
         X_train = self._create_X_array(train_a_directories)
         X_test = self._create_X_array(test_b_directories)
@@ -91,7 +99,7 @@ class myCareDataset:
         return X_train ,X_test ,y_train ,y_test
 
       if isinstance(mode,list):
-        train_a_directories, test_b_directories = self._train_a_test_b_split_directories(p)
+        train_a_directories, test_b_directories = self._train_a_test_b_split_directories(p,files)
 
         X_train = self._create_X_array(train_a_directories)
         X_test = self._create_X_array(test_b_directories)
@@ -102,8 +110,8 @@ class myCareDataset:
         return X_train ,X_test ,y_train ,y_test
 
 
-    def _train_a_test_b_split_directories(self, p):
-        files = list(self.data.keys())
+    def _train_a_test_b_split_directories(self, p, files):
+      
         n_elements_to_select = int(len(files) * p)
         train_a_directories = random.sample(files, n_elements_to_select)
         test_b_directories = [f for f in files if f not in train_a_directories]
@@ -134,3 +142,4 @@ class myCareDataset:
             w.data = w.data[:,::10]
 
       self.fs = 10
+
