@@ -149,3 +149,57 @@ def diffPhaseCorrected(data,
     final = np.concatenate((diff1,diff2,diff3), axis = 0)
 
   return final
+
+def draw_confusion_matrix(y_pred, y_test, figsize=(7,7),save_image = False):
+    # calculate the confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    # set up the plot
+    plt.figure(figsize=figsize)
+    plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    plt.title('Matriz de Confusão')
+    plt.colorbar()
+    tick_marks = np.arange(2)
+    plt.xticks(tick_marks, ['Negativo', 'Positivo'], rotation=45)
+    plt.yticks(tick_marks, ['Negativo', 'Positivo'])
+
+    # fill the confusion matrix
+    thresh = cm.max() / 2.
+    for i, j in np.ndindex(cm.shape):
+        plt.text(j, i, format(cm[i, j], 'd'),
+                 horizontalalignment='center',
+                 color='white' if cm[i, j] > thresh else 'black')
+
+    # add axis labels
+    plt.ylabel('Label Real')
+    plt.xlabel('Label Predita')
+    if save_image:
+      plt.savefig('Exemplo.png')
+    # show the plot
+    plt.show()
+
+def getMetrics(y_test, y_pred):
+    acc = accuracy_score(y_test, y_pred)
+    pre = precision_score(y_test, y_pred)
+    rec = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    roc_auc = roc_auc_score(y_test, y_pred)
+
+    return acc,pre,rec,f1,roc_auc
+
+def print_conf_matrix(y_test, y_pred,print_matrix = True,save_image = False):
+
+    acc,pre,rec,f1,roc_auc = getMetrics(y_test, y_pred)
+
+    print('Area under the ROC curve: {:.4f}'.format(roc_auc))
+    print('Accuracy: {:.4f}'.format(acc))
+    print('Precision: {:.4f}'.format(pre))
+    print('Recall: {:.4f}'.format(rec))
+    print('F1-Score: {:.4f}'.format(f1))
+
+    print('\n\n')
+
+    if print_matrix:
+      draw_confusion_matrix(y_pred, y_test, figsize=(7,7),save_image = save_image)
+
+
