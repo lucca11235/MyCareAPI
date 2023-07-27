@@ -99,8 +99,6 @@ def diffPhaseCorrected(data,
   Input: data loaded like np.load(path + f)
   Ouput: data preprocessed for the difference of phases
   '''
-
-  data = data.T
   a1,a2,a3 = data[:57],data[57:114],data[114:]
 
   # Phase difference
