@@ -4,6 +4,7 @@ import numpy as np
 from scipy.signal import butter, lfilter
 from sklearn.metrics import accuracy_score,recall_score,precision_score,f1_score,roc_auc_score,confusion_matrix
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 def process(arr):
 
@@ -222,3 +223,40 @@ def print_conf_matrix(y_test, y_pred,print_matrix = True,save_image = False):
       draw_confusion_matrix(y_pred, y_test, figsize=(7,7),save_image = save_image)
 
 
+def heatmap(window,
+            title = '',
+            save_image = False,
+            save_name = 'image',
+            size = (15,8),
+            cbar = False,
+            xTicks = 100):
+
+  plt.figure(figsize = size)
+  plt.title(f'{title}', fontsize = 13)
+
+  h = sns.heatmap(window, cbar = cbar)
+
+  #Ticks
+  h.set_xticks(np.arange(0,window.shape[1],window.shape[1]//8))
+  h.set_yticks(np.arange(0,window.shape[0],window.shape[0]//8))
+
+  # Labels
+  h.set_xticklabels(np.arange(0,window.shape[1],window.shape[1]//8))
+  h.set_yticklabels(np.arange(0,window.shape[0],window.shape[0]//8))
+
+  if save_image:
+    plt.savefig(f'{save_name}.png')
+  plt.show()
+
+def plot(arr,
+         title = '',
+         size = (15,8),
+         save_image = False,
+         save_name = 'image'):
+
+  plt.figure(figsize = size)
+  plt.title(f'{title}', fontsize = 13)
+  plt.plot(arr)
+  if save_image:
+    plt.savefig(f'{save_name}.png')
+  plt.show()
