@@ -2,6 +2,7 @@ from scipy import signal
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 from scipy.signal import butter, lfilter
+from sklearn.metrics import accuracy_score,recall_score,precision_score,f1_score,roc_auc_score,confusion_matrix
 
 def process(arr):
 
